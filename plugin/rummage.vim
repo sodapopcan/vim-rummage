@@ -5,21 +5,54 @@
 " License:    Same terms as Vim itself (see :help license)
 " Version:    0.1
 
+
+" Utility {{{1
+
+function! s:warn(str) abort
+  echohl WarningMsg
+  echomsg a:str
+  echohl None
+  let v:warningmsg = a:str
+endfunction
+
+
+" Job {{{1
+
+let s:vim8 = has('patch-8.0.0039') && exists('*job_start')
+let s:is_win = has('win32') || has('win64')
+let s:nvim = has('nvim-0.2') || (has('nvim') && exists('*jobwait') && !s:is_win)
+let s:use_job = s:vim8 || s:nvim
+let s:running = 0
+
+function! s:job_done(ch, msg)
+  let s:running = 0
+endfunction
+
+function! s:job_error(ch, msg)
+  let s:running = 0
+  echom a:msg
+endfunction
+
+function! s:populate(output, errmsg) abort
+  if len(a:output)
+    cgetexpr a:output
+    silent botright copen
+  else
+    return a:warn(a:errmsg)
+  endif
+endfunction
+
+" Plugin {{{1
+
 let s:return_file = ''
 let s:output = ''
 
-" Plugin {{{1
 function! s:rummage(bang, ...) abort
   if a:bang && !len(a:1)
     call s:edit_return_file()
     return
   elseif !len(a:1)
-    if len(s:output)
-      cgetexpr s:output
-      silent botright copen
-    else
-      return s:warn("No recent searches")
-    endif
+    return s:populate(s:output, "No recent searches")
   endif
 
   let arg = join(a:000, ' ')
@@ -70,12 +103,7 @@ function! s:rummage(bang, ...) abort
 
   let s:output = system(git_cmd . " --no-pager grep" . flags . " --no-color -n -I " . cmd)
 
-  if len(s:output)
-    cgetexpr s:output
-    silent botright copen
-  else
-    call s:warn(' ¯\_(ツ)_/¯  No results for "' . search_pattern . '"')
-  endif
+  return s:populate(s:output, ' ¯\_(ツ)_/¯  No results for "' . search_pattern . '"')
 endfunction
 
 function! s:edit_return_file() abort
@@ -92,13 +120,6 @@ function! s:in_git_repo() abort
     call system('git rev-parse --is-inside-work-tree 2> /dev/null')
     return !v:shell_error
   endif
-endfunction
-
-function! s:warn(str) abort
-  echohl WarningMsg
-  echomsg a:str
-  echohl None
-  let v:warningmsg = a:str
 endfunction
 
 function! s:custom_dirs(A,L,P) abort
