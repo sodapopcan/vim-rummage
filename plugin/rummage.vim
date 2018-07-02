@@ -5,6 +5,10 @@
 " License:    Same terms as Vim itself (see :help license)
 " Version:    0.1
 
+if exists('g:loaded_rummage') || &cp
+  finish
+endif
+let g:loaded_rummage = 1
 
 " Helpers {{{1
 
