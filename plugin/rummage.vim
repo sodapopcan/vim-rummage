@@ -25,23 +25,6 @@ function! s:in_git_repo() abort
 endfunction
 
 
-" Job {{{1
-
-let s:vim8 = has('patch-8.0.0039') && exists('*job_start')
-let s:is_win = has('win32') || has('win64')
-let s:nvim = has('nvim-0.2') || (has('nvim') && exists('*jobwait') && !s:is_win)
-let s:use_job = s:vim8 || s:nvim
-let s:running = 0
-
-function! s:job_done(ch, msg)
-  let s:running = 0
-endfunction
-
-function! s:job_error(ch, msg)
-  let s:running = 0
-  echom a:msg
-endfunction
-
 " Plugin {{{1
 
 let s:return_file = ''
@@ -52,7 +35,7 @@ function! s:populate(output, errmsg) abort
     cgetexpr a:output
     silent botright copen
   else
-    return a:warn(a:errmsg)
+    return s:warn(a:errmsg)
   endif
 endfunction
 
@@ -114,7 +97,7 @@ function! s:rummage(bang, ...) abort
 
   let s:output = system(git_cmd . " --no-pager grep" . flags . " --no-color -n -I " . cmd)
 
-  return s:populate(s:output, " ¯\_(ツ)_/¯  No results for '" . search_pattern . "'")
+  return s:populate(s:output, "¯\\_(ツ)_/¯  No results for '" . search_pattern . "'")
 endfunction
 
 
