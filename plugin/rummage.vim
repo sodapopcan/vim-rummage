@@ -6,13 +6,22 @@
 " Version:    0.1
 
 
-" Utility {{{1
+" Helpers {{{1
 
 function! s:warn(str) abort
   echohl WarningMsg
   echomsg a:str
   echohl None
   let v:warningmsg = a:str
+endfunction
+
+function! s:in_git_repo() abort
+  if exists('g:loaded_fugitive') && exists('b:git_dir')
+    return 1
+  else
+    call system('git rev-parse --is-inside-work-tree 2> /dev/null')
+    return !v:shell_error
+  endif
 endfunction
 
 
@@ -33,6 +42,11 @@ function! s:job_error(ch, msg)
   echom a:msg
 endfunction
 
+" Plugin {{{1
+
+let s:return_file = ''
+let s:output = ''
+
 function! s:populate(output, errmsg) abort
   if len(a:output)
     cgetexpr a:output
@@ -42,10 +56,12 @@ function! s:populate(output, errmsg) abort
   endif
 endfunction
 
-" Plugin {{{1
-
-let s:return_file = ''
-let s:output = ''
+function! s:edit_return_file() abort
+  if s:return_file ==# ''
+    return
+  endif
+  exec "edit" s:return_file
+endfunction
 
 function! s:rummage(bang, ...) abort
   if a:bang && !len(a:1)
@@ -103,24 +119,11 @@ function! s:rummage(bang, ...) abort
 
   let s:output = system(git_cmd . " --no-pager grep" . flags . " --no-color -n -I " . cmd)
 
-  return s:populate(s:output, ' ¯\_(ツ)_/¯  No results for "' . search_pattern . '"')
+  return s:populate(s:output, " ¯\_(ツ)_/¯  No results for '" . search_pattern . "'")
 endfunction
 
-function! s:edit_return_file() abort
-  if s:return_file ==# ''
-    return
-  endif
-  exec "keepjumps edit" s:return_file
-endfunction
 
-function! s:in_git_repo() abort
-  if exists('g:loaded_fugitive') && exists('b:git_dir')
-    return 1
-  else
-    call system('git rev-parse --is-inside-work-tree 2> /dev/null')
-    return !v:shell_error
-  endif
-endfunction
+" Command {{{1
 
 function! s:custom_dirs(A,L,P) abort
   let args = substitute(a:L, '\v\C^%(\s+)?R%(ummage)?%(\s+)%(%(("|'')%(.*)%("|'')|\w)\s+)?', '', '')
@@ -147,5 +150,4 @@ function! s:custom_dirs(A,L,P) abort
   return ''
 endfunction
 
-" Commands {{{1
 command! -nargs=* -bang -complete=custom,s:custom_dirs Rummage call s:rummage(<bang>0, <q-args>)
