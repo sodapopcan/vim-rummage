@@ -34,7 +34,7 @@ endfunction
 let s:return_file = ''
 let s:output = ''
 
-function! s:populate(output, errmsg) abort
+function! s:populate_qf(output, errmsg) abort
   if len(a:output)
     cgetexpr a:output
     silent botright copen
@@ -50,7 +50,7 @@ function! s:rummage(bang, ...) abort
     endif
     return
   elseif !len(a:1)
-    return s:populate(s:output, "No recent searches")
+    return s:populate_qf(s:output, "No recent searches")
   endif
 
   let arg = join(a:000, ' ')
@@ -101,7 +101,7 @@ function! s:rummage(bang, ...) abort
 
   let s:output = system(git_cmd . " --no-pager grep" . flags . " --no-color -n -I " . cmd)
 
-  return s:populate(s:output, "¯\\_(ツ)_/¯  No results for '" . search_pattern . "'")
+  return s:populate_qf(s:output, "¯\\_(ツ)_/¯  No results for '" . search_pattern . "'")
 endfunction
 
 
