@@ -56,16 +56,11 @@ function! s:populate(output, errmsg) abort
   endif
 endfunction
 
-function! s:edit_return_file() abort
-  if s:return_file ==# ''
-    return
-  endif
-  exec "edit" s:return_file
-endfunction
-
 function! s:rummage(bang, ...) abort
   if a:bang && !len(a:1)
-    call s:edit_return_file()
+    if len(s:return_file)
+      exec "edit" s:return_file
+    endif
     return
   elseif !len(a:1)
     return s:populate(s:output, "No recent searches")
