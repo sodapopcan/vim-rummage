@@ -99,9 +99,13 @@ function! s:rummage(bang, ...) abort
     let flags.= ' --no-index'
   endif
 
-  let s:output = system(git_cmd . " --no-pager grep" . flags . " --no-color -n -I " . cmd)
+  let output = system(git_cmd . " --no-pager grep" . flags . " --no-color -n -I " . cmd)
 
-  return s:populate_qf(s:output, "¯\\_(ツ)_/¯  No results for '" . search_pattern . "'")
+  return s:populate_qf(output, "¯\\_(ツ)_/¯  No results for '" . search_pattern . "'")
+
+  if len(output)
+    let s:output = output
+  endif
 endfunction
 
 
