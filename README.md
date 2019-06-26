@@ -56,7 +56,7 @@ Lots of options, but my favourite is [vim-plug](https://github.com/junegunn/vim-
 Add the following to your vimrc:
 
 ```viml
-Plug 'sodapopcan/vim-plug'
+Plug 'sodapopcan/vim-rummage'
 ```
 
 Then type:
