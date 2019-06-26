@@ -29,7 +29,7 @@ Usage
 :Rummage "don't respect ignore files"a
           " The `!` is not needed when outside of a source controlled repo
 :Rummage! "By-pass rummage and send args straight to the configured program"
-:.Rummage " search the `word` under the cursor&mdash;also works with a !
+:.Rummage " search the `word` under the cursor--also works with a !
 :Rummage  " Repopulate the quickfix window with the last results without re-performing the search
 :Rummage! " Return to the last file you were editing before rummaging 
 ```
