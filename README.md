@@ -26,11 +26,44 @@ Usage
 :Rummage "limit to some file types" ruby,javascript,python
 :Rummage "search in path patterns" *_spec.rb
 :Rummage "any file type in the app/ and lib/ directories" * app/,lib/ " Supports completion of dirs
-:Rummage! "don't respect ignore files"
+:Rummage "don't respect ignore files"a
           " The `!` is not needed when outside of a source controlled repo
+:Rummage! "By-pass rummage and send args straight to the configured program"
 :.Rummage " search the `word` under the cursor&mdash;also works with a !
 :Rummage  " Repopulate the quickfix window with the last results without re-performing the search
 :Rummage! " Return to the last file you were editing before rummaging 
+```
+
+Configuration
+-------------
+
+Explicitly tell `rummage.vim` about your preferred grepping program:
+
+```viml
+let g:rummage_default_program = "git"  " Can be one of 'git', 'rg', 'ag', 'ack', 'grep'
+```
+
+Use smart case searching (defaults to the value of `:echo &smartcase`)
+```viml
+let g:rummage_use_smartcase = 1
+```
+
+Installation
+------------
+
+Lots of options, but my favourite is [vim-plug](https://github.com/junegunn/vim-plug).
+
+Add the following to your vimrc:
+
+```viml
+Plug 'sodapopcan/vim-plug'
+```
+
+Then type:
+
+```viml
+:source %
+:PlugInstall
 ```
 
 Why?
