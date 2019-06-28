@@ -12,7 +12,7 @@ Features
 - Concise syntax for filtering on filetypes and directories
 - Use slash delimiters for regexes, quotes for literal string searches
 - Always ignore binary files
-- Supports `vim-grep`, `ag`, `ripgrep`, `ack`, and regular old `grep`
+- Supports `git-grep`, `ag`, `ripgrep`, `ack`, and regular old `grep`
 
 Usage
 -----
