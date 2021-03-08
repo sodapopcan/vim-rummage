@@ -273,7 +273,7 @@ function! rummage#rummage(cnt, bang, ...) abort
     endif
 
     for filetype in filetypes
-      let pattern = filetype ==# '*' ? '*' : '*.'.filetype
+      let pattern = filetype ==# '*' ? '*' : filetype
       if len(dirs)
         for dir in dirs
           if program_name ==# 'git'
