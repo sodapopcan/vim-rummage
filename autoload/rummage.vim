@@ -259,7 +259,7 @@ function! rummage#rummage(cnt, bang, ...) abort
     return s:warn(command.error)
   endif
 
-  let cmd = shellescape(command.search_pattern)
+  let args = shellescape(command.search_pattern)
 
   let program_name = g:rummage_program
 
@@ -269,7 +269,7 @@ function! rummage#rummage(cnt, bang, ...) abort
     let dirs = map(split(command.directory_pattern, ','), 'substitute(v:val, ''\v[/]+$'', '''', '''')')
 
     if program_name ==# 'git'
-      let cmd.= " --"
+      let args.= " --"
     endif
 
     for filetype in filetypes
@@ -277,13 +277,13 @@ function! rummage#rummage(cnt, bang, ...) abort
       if len(dirs)
         for dir in dirs
           if program_name ==# 'git'
-            let cmd.= " '".dir."/".pattern."'"
+            let args.= " '".dir."/".pattern."'"
           else
-            let cmd.= " ".dir."/".pattern
+            let args.= " ".dir."/".pattern
           endif
         endfor
       else
-        let cmd.= " '".pattern."'"
+        let args.= " '".pattern."'"
       endif
     endfor
   endif
@@ -305,8 +305,7 @@ function! rummage#rummage(cnt, bang, ...) abort
     let flags.= ' --fixed-strings'
   endif
 
-  let cmd = printf(program.template, program_name, flags, cmd)
-  let output = system(cmd)
+  let output = system(printf(program.template, program_name, flags, args))
 
   if len(output)
     let s:last_output = output
