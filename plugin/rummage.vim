@@ -11,7 +11,7 @@ endif
 let g:loaded_rummage = 1
 
 
-command! -nargs=* -count=0 -bang -complete=custom,s:complete Rummage call rummage#rummage(<count>, <bang>0, <q-args>)
+command! -nargs=* -count=0 -bang -complete=custom,rummage#complete Rummage call rummage#rummage(<count>, <bang>0, <q-args>)
 
 au! FileType qf au! CursorMoved <buffer> 
       \   if getqflist({"title":0}).title ==# "Rummage"

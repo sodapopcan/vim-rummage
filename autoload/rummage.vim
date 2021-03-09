@@ -405,7 +405,7 @@ endfunction
 
 " Command {{{1
 "
-function! s:complete(A,L,P) abort
+function! rummage#complete(A,L,P) abort
   let command_regex = '\v\C^%(\s+)?Rum%(mage)?' 
   let search_string_regex = '\v\C%(\s+)?%(%(%("|''|/)%(.*)%("|''|/)%(i)?|\w+)\s+)?'
   let all_args = substitute(a:L, command_regex, '', '')
